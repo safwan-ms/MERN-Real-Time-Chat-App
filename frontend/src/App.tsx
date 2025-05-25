@@ -1,11 +1,16 @@
-import { Button } from "./components/ui/button";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (
-    <div className="text-teal-700">
-      <div className="flex flex-col items-center justify-center min-h-svh">
-        <Button className="cursor-pointer">Click me</Button>
-      </div>
+    <div className="bg-[url('./src/assets/bgImage.svg')] bg-cover bg-no-repeat overflow-hidden">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Routes>
     </div>
   );
 };
