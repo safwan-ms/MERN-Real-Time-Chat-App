@@ -2,9 +2,10 @@ import ChatContainer from "@/components/ChatContainer";
 import RightSideBar from "@/components/RightSideBar";
 import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
+import type { DummyDataProps } from "../types";
 
 const HomePage = () => {
-  const [selectedUser, setSelectedUser] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<DummyDataProps | null>(null);
 
   return (
     <div className="w-full h-screen sm:px-[15%] sm:py-[5%] ">
@@ -15,7 +16,10 @@ const HomePage = () => {
             : "md:grid-cols-2"
         }`}
       >
-        <Sidebar />
+        <Sidebar
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
         <ChatContainer />
         <RightSideBar />
       </div>
