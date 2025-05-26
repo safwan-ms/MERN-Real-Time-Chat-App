@@ -48,7 +48,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       </div>
 
       {/* ---------------chat area----------------- */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 pb-20">
         {messagesDummyData.map((msg, index) => {
           const isSender = msg.senderId === loggedInUserId;
 
@@ -103,6 +103,29 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
           );
         })}
         <div ref={scrollEnd}></div>
+      </div>
+      {/* ----------bottom area------------- */}
+      <div className="absolute bottom-0 left-0 right-0 flex items-center gap-3 p-3">
+        <div className="flex-1 flex items-center bg-gray-100/10 px-3 rounded-full">
+          <input
+            type="text"
+            placeholder="Send a Message..."
+            className="flex-1 text-sm p-3 border-none rounded-lg outline-none text-white placeholder-gray-400"
+          />
+          <input type="file" id="image" accept="image/png, image/jpeg" hidden />
+          <label htmlFor="image">
+            <img
+              src={assets.gallery_icon}
+              alt="gallery_icon"
+              className="w-5 mr-2 cursor-pointer"
+            />
+          </label>
+        </div>
+        <img
+          src={assets.send_button}
+          alt="send_button"
+          className="w-7 cursor-pointer"
+        />
       </div>
     </main>
   ) : (
