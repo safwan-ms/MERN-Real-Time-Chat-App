@@ -3,13 +3,9 @@ import type { DummyDataProps } from "@/types";
 
 interface RightSidebarProps {
   selectedUser: DummyDataProps | null;
-  setSelectedUser: React.Dispatch<React.SetStateAction<DummyDataProps | null>>;
 }
 
-const RightSideBar: React.FC<RightSidebarProps> = ({
-  selectedUser,
-  setSelectedUser,
-}) => {
+const RightSideBar: React.FC<RightSidebarProps> = ({ selectedUser }) => {
   return (
     selectedUser && (
       <div
