@@ -20,6 +20,14 @@ const LoginPage = () => {
     setIsDataSubmitted(false);
   }, []);
 
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (currentState === "Sign Up" && !isDataSubmitted) {
+      setIsDataSubmitted(true);
+      return;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-cover bg-center flex items-center justify-center px-4 py-10 sm:gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl">
       {/* ---------left----------- */}
@@ -30,15 +38,21 @@ const LoginPage = () => {
       />
 
       {/* --------right--------- */}
-      <form className="w-full max-w-md border-2 bg-white/10 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg">
+      <form
+        onSubmit={onSubmitHandler}
+        className="w-full max-w-md border-2 bg-white/10 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg"
+      >
         <h2 className="font-medium text-2xl flex justify-between items-center">
           {currentState}
-          <img
-            src={assets.arrow_icon}
-            className="w-5 cursor-pointer"
-            onClick={toggleState}
-            alt="toggle auth"
-          />
+          {isDataSubmitted && (
+            <img
+              // onClick={() => setIsDataSubmitted(false)}
+              src={assets.arrow_icon}
+              className="w-5 cursor-pointer"
+              onClick={toggleState}
+              alt="toggle auth"
+            />
+          )}
         </h2>
 
         {currentState === "Sign Up" && !isDataSubmitted && (
