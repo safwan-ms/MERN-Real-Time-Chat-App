@@ -6,13 +6,17 @@ export const signup = async (req, res) => {
   const { fullName, email, password, bio } = req.body;
   try {
     if (!fullName || !email || !password || !bio) {
-      res.json({ success: false, message: "All fields are required!" });
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required!" });
     }
 
     const checkUserExists = await User.findOne({ email });
 
     if (checkUserExists) {
-      return res.json({ success: false, message: "User already exists!" });
+      return res
+        .status(409)
+        .json({ success: false, message: "User already exists!" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -27,7 +31,7 @@ export const signup = async (req, res) => {
 
     const token = generateToken(newUser._id);
 
-    res.json({
+    res.status(201).json({
       success: true,
       userData: newUser,
       token,
@@ -35,7 +39,7 @@ export const signup = async (req, res) => {
     });
   } catch (error) {
     console.log("Internal Server error", error.message);
-    res.json({
+    res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -47,25 +51,40 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const userData = await User.findOne({ email });
 
+    if (!userData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Email doesn't exists" });
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, userData.password);
 
     if (!isPasswordCorrect) {
-      res.json({ success: false, message: "Invalid Credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid Credentials" });
     }
 
     const token = generateToken(userData._id);
 
-    res.json({
+    res.status(200).json({
       success: true,
-      userData,
-      token,
+      _id: userData._id,
+      fullName: userData.fullName,
+      email: userData.email,
+      token: token,
       message: "Login successfully",
     });
   } catch (error) {
     console.log(error.message);
-    res.json({
+    res.status(500).json({
       success: false,
       message: error.message,
     });
   }
+};
+
+// Controller to check if user is authenticated
+export const checkAuth = (req, res) => {
+  res.status(200).json({ success: true, user: req.user });
 };

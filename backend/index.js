@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import http from "http";
 import connectDB from "./lib/db.js";
+import userRoutes from "./routes/userRoutes.js";
 dotenv.config();
 
 //Connect to db
@@ -15,6 +16,7 @@ const server = http.createServer(app);
 app.use(express.json({ limit: "4mb" }));
 app.use(cors());
 app.use("/api/status", (req, res) => res.send("Server is live"));
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT;
 
