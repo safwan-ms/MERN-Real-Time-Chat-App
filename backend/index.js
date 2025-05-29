@@ -22,8 +22,10 @@ app.use(
   })
 );
 app.use(cookieParser());
+
+//Routes
 app.use("/api/status", (req, res) => res.send("Server is live"));
-app.use("/api/users", userRoutes);
+app.use("/api/auth", userRoutes);
 
 const PORT = process.env.PORT;
 

@@ -30,11 +30,13 @@ export const signup = async (req, res) => {
       bio,
     });
 
-    const token = generateToken(newUser._id);
+    const token = generateToken(res, newUser._id);
 
     res.status(201).json({
       success: true,
-      userData: newUser,
+      id: newUser._id,
+      fullName: newUser.fullName,
+      email: newUser.email,
       token,
       message: "Account created successfully",
     });
@@ -66,7 +68,7 @@ export const login = async (req, res) => {
         .json({ success: false, message: "Invalid Credentials" });
     }
 
-    const token = generateToken(userData._id);
+    const token = generateToken(res, userData._id);
 
     res.status(200).json({
       success: true,
