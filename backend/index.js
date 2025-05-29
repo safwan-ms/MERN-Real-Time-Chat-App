@@ -4,6 +4,7 @@ import cors from "cors";
 import http from "http";
 import connectDB from "./lib/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import messageRouter from "./routes/messageRoutes.js";
 import cookieParser from "cookie-parser";
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 //Routes
 app.use("/api/status", (req, res) => res.send("Server is live"));
 app.use("/api/auth", userRoutes);
+app.use("/api/messages", messageRouter);
 
 const PORT = process.env.PORT;
 
