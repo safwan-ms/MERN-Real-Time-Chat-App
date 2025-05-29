@@ -4,6 +4,7 @@ import cors from "cors";
 import http from "http";
 import connectDB from "./lib/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 //Connect to db
@@ -14,7 +15,13 @@ const server = http.createServer(app);
 
 //Middleware setup
 app.use(express.json({ limit: "4mb" }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use("/api/status", (req, res) => res.send("Server is live"));
 app.use("/api/users", userRoutes);
 
