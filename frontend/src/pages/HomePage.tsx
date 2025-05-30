@@ -2,10 +2,10 @@ import ChatContainer from "@/components/ChatContainer";
 import RightSideBar from "@/components/RightSideBar";
 import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
-import type { DummyDataProps } from "../types";
+import type { UserInfoProps } from "../types";
 
 const HomePage = () => {
-  const [selectedUser, setSelectedUser] = useState<DummyDataProps | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserInfoProps | null>(null);
 
   return (
     <div className="w-full h-screen sm:px-[10%] sm:py-[3%] ">

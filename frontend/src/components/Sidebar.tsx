@@ -1,10 +1,10 @@
 import assets, { userDummyData } from "@/assets/assets";
-import type { DummyDataProps } from "@/types";
+import type { UserInfoProps } from "@/types";
 import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
-  selectedUser: DummyDataProps | null;
-  setSelectedUser: React.Dispatch<React.SetStateAction<DummyDataProps | null>>;
+  selectedUser: UserInfoProps | null;
+  setSelectedUser: React.Dispatch<React.SetStateAction<UserInfoProps | null>>;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedUser, setSelectedUser }) => {

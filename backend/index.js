@@ -18,7 +18,7 @@ const server = http.createServer(app);
 
 //Initialize socket.io server
 export const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: { origin: "http://localhost:5173", credentials: true },
 });
 
 //Store online users
@@ -42,8 +42,14 @@ io.on("connection", (socket) => {
 });
 
 //Middleware setup
-app.use(express.json({ limit: "4mb" }));
-app.use(cors());
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Routes

@@ -1,11 +1,11 @@
 import assets, { messagesDummyData } from "@/assets/assets";
 import { formatMessageTime } from "@/lib/utils";
-import type { DummyDataProps } from "@/types";
+import type { UserInfoProps } from "@/types";
 import { useEffect, useRef } from "react";
 
 interface ChatContainerProps {
-  selectedUser: DummyDataProps | null;
-  setSelectedUser: React.Dispatch<React.SetStateAction<DummyDataProps | null>>;
+  selectedUser: UserInfoProps | null;
+  setSelectedUser: React.Dispatch<React.SetStateAction<UserInfoProps | null>>;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({

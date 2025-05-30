@@ -1,8 +1,8 @@
 import assets, { imagesDummyData } from "@/assets/assets";
-import type { DummyDataProps } from "@/types";
+import type { UserInfoProps } from "@/types";
 
 interface RightSidebarProps {
-  selectedUser: DummyDataProps | null;
+  selectedUser: UserInfoProps | null;
 }
 
 const RightSideBar: React.FC<RightSidebarProps> = ({ selectedUser }) => {
