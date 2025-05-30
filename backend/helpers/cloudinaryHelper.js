@@ -1,10 +1,10 @@
-import cloudinary from "../lib/cloudinary";
+import cloudinary from "../lib/cloudinary.js";
 import streamifier from "streamifier";
 
 const uploadToCloudinary = async (buffer) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { resource_type: "auto" },
+      { resource_type: "auto", timeout: 60000 },
       (error, result) => {
         if (error) {
           console.error("Cloudinary  upload failed: ", error);
