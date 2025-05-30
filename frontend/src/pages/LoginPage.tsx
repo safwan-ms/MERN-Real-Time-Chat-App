@@ -1,4 +1,5 @@
 import assets from "@/assets/assets";
+import { useAuth } from "@/hooks/useAuth";
 import { useCallback, useState } from "react";
 
 // Define allowed auth states
@@ -20,12 +21,22 @@ const LoginPage = () => {
     setIsDataSubmitted(false);
   }, []);
 
+  const { login } = useAuth();
+
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (currentState === "Sign Up" && !isDataSubmitted) {
       setIsDataSubmitted(true);
       return;
     }
+
+    const credentials =
+      currentState === "Sign Up"
+        ? { fullName, email, password, bio } // SignUpCredentials
+        : { email, password }; // LoginCredentials
+
+    login(currentState === "Sign Up" ? "signup" : "login", credentials);
   };
 
   return (

@@ -11,8 +11,13 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface SignUpCredentials extends LoginCredentials {
+  fullName: string;
+  bio: string;
+}
+
 export interface UpdateProfile {
   bio: string;
 }
 
-export type AuthState = "login" | "register"; // add more if needed
+export type AuthState = "login" | "signup"; // add more if needed

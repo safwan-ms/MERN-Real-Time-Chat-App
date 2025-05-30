@@ -4,7 +4,12 @@ import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 import type { Socket } from "socket.io-client";
 import { AuthContext } from "./AuthContext";
-import type { AuthState, LoginCredentials, UserInfoProps } from "@/types";
+import type {
+  AuthState,
+  LoginCredentials,
+  SignUpCredentials,
+  UserInfoProps,
+} from "@/types";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -34,7 +39,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const login = async (state: AuthState, credentials: LoginCredentials) => {
+  const login = async (
+    state: AuthState,
+    credentials: LoginCredentials | SignUpCredentials
+  ) => {
     try {
       const { data } = await axios.post(`/api/auth/${state}`, credentials);
       if (data.success) {
