@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       toast.error((error as Error).message);
     }
   };
+
   //Login function to handle user authentication and socket connection
   const login = async (state: AuthState, credentials: LoginCredentials) => {
     try {
@@ -58,6 +59,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           profilePic: data.profilePic || "",
           bio: data.bio || "",
         };
+
         setAuthUser(userData);
         connectSocket(userData);
         toast.success("Login successful!");
@@ -69,6 +71,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  //Logout function to handle user logout and socket disconnected
+  const logout = async () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    setAuthUser(null);
+    setOnlineUsers([]);
+    socket?.disconnect();
+  };
+
+  //Update profile function to handle user profile updates
+
+  const updateProfile = (body) => {
+    try {
+      const { data } = await axios.put("/api/auth/update-profile", body);
+      if (data.success) {
+        setAuthUser(data.user);
+        toast.success("Profile updated successfully");
+      }
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
   //Connect socket function to handle socket connection and online users updates
   const connectSocket = (userData: UserInfoProps) => {
     if (!userData || socket?.connected) return;
@@ -99,6 +123,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     onlineUsers,
     socket,
     login,
+    logout,
+    updateProfile,
   };
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

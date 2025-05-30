@@ -1,24 +1,29 @@
 import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-import cloudinary from "../lib/cloudinary.js";
-import streamifier from "streamifier";
+import {
+  uploadToCloudinary,
+  removeFromCloudinary,
+} from "../helpers/cloudinaryHelper.js";
 
 export const signup = async (req, res) => {
   const { fullName, email, password, bio } = req.body;
+
   try {
     if (!fullName || !email || !password || !bio) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required!" });
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required!",
+      });
     }
 
     const checkUserExists = await User.findOne({ email });
 
     if (checkUserExists) {
-      return res
-        .status(409)
-        .json({ success: false, message: "User already exists!" });
+      return res.status(409).json({
+        success: false,
+        message: "User already exists!",
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -111,55 +116,45 @@ export const updateProfile = async (req, res) => {
     const user = await User.findById(userId); // needed to delete old image
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
-    let profilePic = user.profilePic;
-    let profilePicPublicId = user.profilePicPublicId;
-
+    //If a new image is uploaded
     if (req.file) {
-      // Delete old image from Cloudinary
-      if (profilePicPublicId) {
-        await cloudinary.uploader.destroy(profilePicPublicId);
+      console.log("File received:", req.file);
+
+      //Remove old image from clodinary
+      if (user.profilePic && user.profilePic.publicId) {
+        await removeFromCloudinary(user.profilePic.publicId);
       }
 
-      // Upload new image
-      const streamUpload = () => {
-        return new Promise((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: "profile_pics" },
-            (error, result) => {
-              if (result) resolve(result);
-              else reject(error);
-            }
-          );
-          streamifier.createReadStream(req.file.buffer).pipe(stream);
-        });
-      };
+      //Upload new image
+      const result = await uploadToCloudinary(req.file.buffer);
+      const { secure_url: url, public_id: publicId } = result;
 
-      const uploadResult = await streamUpload();
-
-      profilePic = uploadResult.secure_url;
-      profilePicPublicId = uploadResult.public_id;
+      user.profilePic = { url, publicId };
     }
 
-    // Final DB update
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        fullName: fullName || user.fullName,
-        bio: bio || user.bio,
-        profilePic,
-        profilePicPublicId,
-      },
-      { new: true }
-    );
+    switch (true) {
+      case !fullName:
+        return res.status(400).json({ message: "Name is required" });
+    }
 
-    res.json({ success: true, user: updatedUser });
+    user.fullName = fullName;
+    user.bio = bio;
+
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user,
+    });
   } catch (error) {
     console.error("Update profile error:", error.message);
+
     res.status(500).json({ success: false, message: error.message });
   }
 };
