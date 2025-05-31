@@ -122,6 +122,11 @@ export const updateProfile = async (req, res) => {
       });
     }
 
+    // Ensure profilePic is always an object
+    if (typeof user.profilePic !== "object" || user.profilePic === null) {
+      user.profilePic = { url: "", publicId: "" };
+    }
+
     //If a new image is uploaded
     if (req.file) {
       console.log("File received:", req.file);
