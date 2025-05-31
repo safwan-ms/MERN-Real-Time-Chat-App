@@ -3,7 +3,7 @@ import "./index.css";
 import "./font.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./context/AuthProvider.tsx";
+import { AuthProvider } from "./context/AuthContext/AuthProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>

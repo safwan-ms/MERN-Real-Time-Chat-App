@@ -1,3 +1,8 @@
+export interface UpdateProfileData {
+  fullName?: string;
+  bio?: string;
+  profilePic?: string;
+}
 export interface UserInfoProps {
   _id: string;
   email: string;
@@ -14,12 +19,6 @@ export interface LoginCredentials {
 export interface SignUpCredentials extends LoginCredentials {
   fullName: string;
   bio: string;
-}
-
-export interface UpdateProfileData {
-  fullName?: string;
-  bio?: string;
-  profilePic?: string;
 }
 
 export type AuthState = "login" | "signup"; // add more if needed

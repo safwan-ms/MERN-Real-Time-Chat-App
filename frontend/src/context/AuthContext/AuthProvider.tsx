@@ -8,8 +8,9 @@ import type {
   AuthState,
   LoginCredentials,
   SignUpCredentials,
+  UpdateProfileData,
   UserInfoProps,
-} from "@/types";
+} from "./types";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -75,7 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     socket?.disconnect();
   };
 
-  const updateProfile = async (body: Partial<UserInfoProps>) => {
+  const updateProfile = async (body: UpdateProfileData) => {
     try {
       const { data } = await axios.put("/api/auth/update-profile", body);
       if (data.success) {

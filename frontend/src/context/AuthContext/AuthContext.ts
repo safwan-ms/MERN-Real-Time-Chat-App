@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import type { Socket } from "socket.io-client";
 import axios from "axios";
-import type { AuthState, LoginCredentials, UserInfoProps } from "@/types";
+import type { AuthState, LoginCredentials, UserInfoProps } from "./types";
 
 export interface AuthContextType {
   axios: typeof axios;

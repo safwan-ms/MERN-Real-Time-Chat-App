@@ -1,4 +1,5 @@
 import assets, { userDummyData } from "@/assets/assets";
+import { useAuth } from "@/hooks/useAuth";
 import type { UserInfoProps } from "@/types";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +10,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedUser, setSelectedUser }) => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   return (
     <aside
       className={`bg-[#8185B2]/10 h-full p-5 rounded-r-xl overflow-y-scroll text-white ${
@@ -36,7 +38,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedUser, setSelectedUser }) => {
 
               <hr className="my-3 border-t border-gray-500" />
 
-              <p className="cursor-pointer text-sm">Logout</p>
+              <p onClick={logout} className="cursor-pointer text-sm">
+                Logout
+              </p>
             </div>
           </div>
         </div>
