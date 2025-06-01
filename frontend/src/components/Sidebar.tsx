@@ -1,13 +1,33 @@
-import assets, { userDummyData } from "@/assets/assets";
-import type { UserInfoProps } from "@/context/AuthContext/types";
+import assets from "@/assets/assets";
 import { useAuth } from "@/hooks/useAuth";
 import { useChat } from "@/hooks/useChat";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  const { selectedUser } = useChat();
+  const {
+    getUsers,
+    selectedUser,
+    setSelectedUser,
+    users,
+    unseenMessages,
+    setUnseenMessages,
+  } = useChat();
+  const { logout, onlineUsers } = useAuth();
+
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const [input, setInput] = useState("");
+
+  const filteredUser =
+    typeof input === "string" && input.length > 0
+      ? users.filter((user) =>
+          user.fullName.toLowerCase().includes(input.toLowerCase())
+        )
+      : users;
+
+  useEffect(() => {
+    getUsers();
+  }, [onlineUsers]);
 
   return (
     <aside
@@ -44,18 +64,18 @@ const Sidebar = () => {
         </div>
 
         <div className="bg-[#282142] rounded-full flex items-center gap-2 py-3 px-4 mt-5">
+          <img src={assets.search_icon} alt="Search" className="w-3" />
           <input
+            onChange={(e) => setInput(e.target.value)}
             type="text"
             className="bg-transparent outline-none text-white text-xs placeholder-[#c8c8c8] flex-1"
             placeholder="Search User..."
           />
-
-          <img src={assets.search_icon} alt="Search" className="w-3" />
         </div>
       </div>
 
       <div className="flex flex-col">
-        {userDummyData.map((user, index) => (
+        {filteredUser.map((user, index) => (
           <div
             onClick={() => setSelectedUser(user)}
             key={index}
@@ -64,7 +84,7 @@ const Sidebar = () => {
             }`}
           >
             <img
-              src={user?.profilePic || assets.avatar_icon}
+              src={user?.profilePic.url || assets.avatar_icon}
               alt="profile"
               className="w-[35px] aspect-[1/1] rounded-full"
             />
