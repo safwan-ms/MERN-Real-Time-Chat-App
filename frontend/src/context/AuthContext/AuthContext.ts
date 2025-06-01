@@ -10,7 +10,7 @@ export interface AuthContextType {
   socket: Socket | null;
   login: (state: AuthState, credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
-  updateProfile: (body: Partial<UserInfoProps>) => Promise<void>;
+  updateProfile: (body: FormData) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(

@@ -1,15 +1,16 @@
 import assets from "@/assets/assets";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { authUser, updateProfile } = useAuth();
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null); // For new file
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedImg, setSelectedImg] = useState<string | undefined>(
-    authUser?.profilePic
-  ); // For existing or base64 image
+    authUser?.profilePic.url
+  );
 
   const navigate = useNavigate();
   const [name, setName] = useState(authUser?.fullName || "");
@@ -18,27 +19,19 @@ const ProfilePage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!selectedFile) {
-      await updateProfile({ fullName: name, bio });
-      navigate("/");
-      return;
+    const profileData = new FormData();
+    profileData.append("fullName", name);
+    profileData.append("bio", bio);
+    if (selectedFile) {
+      profileData.append("profilePic", selectedFile);
     }
 
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onload = async () => {
-      const result = reader.result;
-      if (typeof result === "string") {
-        await updateProfile({
-          profilePic: result,
-          fullName: name,
-          bio,
-        });
-        navigate("/");
-      } else {
-        console.error("FileReader result is not a string");
-      }
-    };
+    try {
+      await updateProfile(profileData);
+      navigate("/");
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   };
 
   return (
@@ -59,7 +52,7 @@ const ProfilePage = () => {
                 const file = e.target.files?.[0];
                 if (file) {
                   setSelectedFile(file);
-                  setSelectedImg(undefined); // Remove old image preview
+                  setSelectedImg(undefined);
                 }
               }}
               type="file"
@@ -107,7 +100,7 @@ const ProfilePage = () => {
         </form>
 
         <img
-          src={authUser?.profilePic || assets.logo_icon}
+          src={authUser?.profilePic.url || assets.logo_icon}
           alt="Logo"
           className="max-w-44 aspect-square object-cover rounded-full mx-10 max-sm:mt-10"
         />

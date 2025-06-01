@@ -8,9 +8,9 @@ import type {
   AuthState,
   LoginCredentials,
   SignUpCredentials,
-  UpdateProfileData,
   UserInfoProps,
 } from "./types";
+export type UpdateProfileData = FormData;
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -74,17 +74,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setAuthUser(null);
     setOnlineUsers([]);
     socket?.disconnect();
+    toast.success("Logged out successfully!");
   };
 
-  const updateProfile = async (body: UpdateProfileData) => {
+  const updateProfile = async (formData: FormData) => {
     try {
-      const { data } = await axios.put("/api/auth/update-profile", body);
+      const { data } = await axios.put("/api/auth/update-profile", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       if (data.success) {
         setAuthUser(data.user);
         toast.success("Profile updated successfully");
+      } else {
+        toast.error("Failed to update profile");
       }
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error((error as Error).message || "Profile update failed");
+      throw error;
     }
   };
 

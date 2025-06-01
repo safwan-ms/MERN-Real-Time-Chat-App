@@ -1,13 +1,20 @@
 export interface UpdateProfileData {
   fullName?: string;
   bio?: string;
-  profilePic?: string;
+  profilePic?: {
+    url: string;
+    publicId: string;
+  };
 }
+
 export interface UserInfoProps {
   _id: string;
   email: string;
   fullName: string;
-  profilePic: string;
+  profilePic: {
+    url: string;
+    publicId: string;
+  };
   bio: string;
 }
 

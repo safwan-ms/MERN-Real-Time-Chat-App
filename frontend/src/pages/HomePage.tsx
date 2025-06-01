@@ -1,8 +1,8 @@
 import ChatContainer from "@/components/ChatContainer";
 import RightSideBar from "@/components/RightSideBar";
 import Sidebar from "@/components/Sidebar";
+import type { UserInfoProps } from "@/context/AuthContext/types";
 import { useState } from "react";
-import type { UserInfoProps } from "../types";
 
 const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState<UserInfoProps | null>(null);
@@ -16,10 +16,7 @@ const HomePage = () => {
             : "md:grid-cols-2"
         }`}
       >
-        <Sidebar
-          selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser}
-        />
+        <Sidebar />
         <ChatContainer
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}

@@ -93,6 +93,15 @@ export const login = async (req, res) => {
   }
 };
 
+export const logout = async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ success: true, message: "Logged out successfully" });
+};
+
 // Controller to check if user is authenticated
 export const checkAuth = async (req, res) => {
   res.status(200).json({ success: true, user: req.user });
@@ -113,7 +122,7 @@ export const updateProfile = async (req, res) => {
         .json({ success: false, message: "Nothing to update" });
     }
 
-    const user = await User.findById(userId); // needed to delete old image
+    const user = await User.findById(userId).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -126,11 +135,8 @@ export const updateProfile = async (req, res) => {
     if (typeof user.profilePic !== "object" || user.profilePic === null) {
       user.profilePic = { url: "", publicId: "" };
     }
-
     //If a new image is uploaded
     if (req.file) {
-      console.log("File received:", req.file);
-
       //Remove old image from clodinary
       if (user.profilePic && user.profilePic.publicId) {
         await removeFromCloudinary(user.profilePic.publicId);
@@ -138,6 +144,7 @@ export const updateProfile = async (req, res) => {
 
       //Upload new image
       const result = await uploadToCloudinary(req.file.buffer);
+
       const { secure_url: url, public_id: publicId } = result;
 
       user.profilePic = { url, publicId };
