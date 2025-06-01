@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
 import type { ChatProviderProps } from "./types";
 import { useAuth } from "@/hooks/useAuth";
@@ -75,6 +75,25 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
       }
     });
   };
-  const value = {};
+
+  //function to unsubscribe from messages
+  const unsubscribeFromMessages = async () => {
+    if (socket) socket.off("newMessage");
+  };
+  useEffect(() => {
+    subscribeToMessage();
+    return () => unsubscribeFromMessages();
+  }, [socket, selectedUser]);
+  const value = {
+    messages,
+    users,
+    selectedUser,
+    getUsers,
+    setMessages,
+    sendMessage,
+    setSelectedUser,
+    unseenMessages,
+    setUnseenMessages,
+  };
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };

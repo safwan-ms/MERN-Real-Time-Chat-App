@@ -1,16 +1,14 @@
 import assets, { userDummyData } from "@/assets/assets";
+import type { UserInfoProps } from "@/context/AuthContext/types";
 import { useAuth } from "@/hooks/useAuth";
-import type { UserInfoProps } from "@/types";
+import { useChat } from "@/hooks/useChat";
 import { useNavigate } from "react-router-dom";
 
-interface SidebarProps {
-  selectedUser: UserInfoProps | null;
-  setSelectedUser: React.Dispatch<React.SetStateAction<UserInfoProps | null>>;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ selectedUser, setSelectedUser }) => {
+const Sidebar = () => {
+  const { selectedUser } = useChat();
   const navigate = useNavigate();
   const { logout } = useAuth();
+
   return (
     <aside
       className={`bg-[#8185B2]/10 h-full p-5 rounded-r-xl overflow-y-scroll text-white ${
