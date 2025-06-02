@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (!userData || socket?.connected) return;
 
     const newSocket = io(backendUrl, {
-      query: {
+      auth: {
         userId: userData._id,
       },
       withCredentials: true,

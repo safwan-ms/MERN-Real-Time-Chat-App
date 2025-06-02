@@ -88,6 +88,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
       unsubscribeFromMessages();
     };
   }, [socket, selectedUser]);
+
   const value = {
     messages,
     users,
