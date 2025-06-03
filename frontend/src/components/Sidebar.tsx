@@ -28,8 +28,6 @@ const Sidebar = () => {
   useEffect(() => {
     getUsers();
   }, [onlineUsers]);
-  console.log("Online Users:", onlineUsers);
-  console.log("Users:", users);
 
   return (
     <aside

@@ -11,6 +11,7 @@ interface ChatContextType {
   setSelectedUser: Dispatch<SetStateAction<User | null>>;
   unseenMessages: Record<string, number>;
   setUnseenMessages: Dispatch<SetStateAction<Record<string, number>>>;
+  getMessages: (userId: string) => Promise<void>;
 }
 
 export const ChatContext = createContext<ChatContextType | undefined>(
