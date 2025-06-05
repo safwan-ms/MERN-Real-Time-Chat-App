@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
-import type { ChatProviderProps, Message, User } from "./types";
+import type {
+  ChatProviderProps,
+  Message,
+  MessageDataType,
+  User,
+} from "./types";
 import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 
@@ -33,7 +38,10 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     try {
       const { data } = await axios.get(`/api/messages/${userId}`);
       if (data.success) {
-        setMessages(data.message);
+        setMessages(
+          Array.isArray(data.messages) ? data.messages : [data.messages]
+        );
+        console.log(data);
       }
     } catch (error) {
       toast.error((error as Error).message);
@@ -42,14 +50,16 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   };
 
   //function to send message to selected user
-  const sendMessage = async (messageData: string) => {
+  const sendMessage = async (messageData: MessageDataType) => {
     try {
       const { data } = await axios.post(
         `/api/messages/send/${selectedUser?._id}`,
         messageData
       );
+
       if (data.success) {
         setMessages((prevMessage) => [...prevMessage, data.newMessage]);
+        console.log(data.newMessage);
       } else {
         toast.error(data.message);
       }

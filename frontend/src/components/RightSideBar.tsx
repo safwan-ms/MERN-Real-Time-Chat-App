@@ -1,5 +1,4 @@
 import assets, { imagesDummyData } from "@/assets/assets";
-import type { UserInfoProps } from "@/types";
 
 interface RightSidebarProps {
   selectedUser: UserInfoProps | null;

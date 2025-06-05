@@ -1,5 +1,5 @@
 import { createContext, type Dispatch, type SetStateAction } from "react";
-import type { Message, User } from "./types";
+import type { Message, MessageDataType, User } from "./types";
 
 interface ChatContextType {
   messages: Message[];
@@ -7,7 +7,7 @@ interface ChatContextType {
   selectedUser: User | null;
   getUsers: () => Promise<void>;
   setMessages: Dispatch<SetStateAction<Message[]>>;
-  sendMessage: (messageData: string) => Promise<void>;
+  sendMessage: (messageData: MessageDataType) => Promise<void>;
   setSelectedUser: Dispatch<SetStateAction<User | null>>;
   unseenMessages: Record<string, number>;
   setUnseenMessages: Dispatch<SetStateAction<Record<string, number>>>;

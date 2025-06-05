@@ -1,4 +1,4 @@
-import assets, { messagesDummyData } from "@/assets/assets";
+import assets from "@/assets/assets";
 import { useAuth } from "@/hooks/useAuth";
 import { useChat } from "@/hooks/useChat";
 import { formatMessageTime } from "@/lib/utils";
@@ -8,22 +8,27 @@ import toast from "react-hot-toast";
 const ChatContainer = () => {
   const { messages, selectedUser, setSelectedUser, sendMessage, getMessages } =
     useChat();
+
   const { authUser, onlineUsers } = useAuth();
 
   const scrollEnd = useRef<HTMLDivElement | null>(null);
   // const loggedInUserId = "680f50e4f10f3cd28382ecf9";
   const [input, setInput] = useState("");
 
-  const handleSubmitMessage = async (e) => {
+  const handleSubmitMessage = async (
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLImageElement>
+  ) => {
     e.preventDefault();
     if (input.trim() === "") return null;
     await sendMessage({ text: input.trim() });
     setInput("");
   };
-
   //Handle sending an image
-  const handleSendImage = async (e) => {
-    const file = e.target.files[0];
+  const handleSendImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file || !file.type.startsWith("image/")) {
       toast.error("select an image file");
       return;
@@ -57,17 +62,21 @@ const ChatContainer = () => {
           alt="profile"
           className="w-8 h-8 rounded-full"
         />
+
         <p className="flex-1 text-lg text-white flex items-center gap-2">
           {selectedUser.fullName}
-          {onlineUsers.includes(selectedUser._id)}{" "}
-          <span className="w-2 h-2 rounded-full bg-green-500"></span>
+          {onlineUsers.includes(selectedUser._id) && (
+            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+          )}
         </p>
+
         <img
           onClick={() => setSelectedUser(null)}
           src={assets.arrow_icon}
           alt="icon"
           className="md:hidden w-6 cursor-pointer"
         />
+
         <img
           src={assets.help_icon}
           alt="help_icon"
@@ -77,12 +86,12 @@ const ChatContainer = () => {
 
       {/* ---------------chat area----------------- */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 pb-20">
-        {messages?.map((msg, index) => {
+        {messages?.map((msg) => {
           const isSender = msg.senderId === authUser?._id;
 
           return (
             <div
-              key={index}
+              key={msg._id}
               className={`flex items-end gap-2 ${
                 isSender ? "justify-end" : "justify-start"
               }`}
@@ -114,6 +123,7 @@ const ChatContainer = () => {
                     {msg.text}
                   </p>
                 )}
+
                 <p className="text-[10px] text-gray-400 mt-1 text-right">
                   {formatMessageTime(msg.createdAt)}
                 </p>
@@ -142,11 +152,14 @@ const ChatContainer = () => {
           <input
             onChange={(e) => setInput(e.target.value)}
             value={input}
-            onKeyDown={(e) => (e.key === "Enter" ? handleSendMessage(e) : null)}
+            onKeyDown={(e) =>
+              e.key === "Enter" ? handleSubmitMessage(e) : null
+            }
             type="text"
             placeholder="Send a Message..."
             className="flex-1 text-sm p-3 border-none rounded-lg outline-none text-white placeholder-gray-400"
           />
+
           <input
             onChange={handleSendImage}
             type="file"
@@ -154,6 +167,7 @@ const ChatContainer = () => {
             accept="image/png, image/jpeg"
             hidden
           />
+
           <label htmlFor="image">
             <img
               onClick={handleSubmitMessage}
@@ -163,7 +177,9 @@ const ChatContainer = () => {
             />
           </label>
         </div>
+
         <img
+          onClick={handleSubmitMessage}
           src={assets.send_button}
           alt="send_button"
           className="w-7 cursor-pointer"

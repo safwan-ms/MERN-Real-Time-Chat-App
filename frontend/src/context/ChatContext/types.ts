@@ -4,17 +4,6 @@ export interface ChatProviderProps {
   children: ReactNode;
 }
 
-export interface Message {
-  _id: string;
-  senderId: string;
-  receiverId: string;
-  text?: string;
-  image?: string;
-  seen: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface User {
   _id: string;
   email: string;
@@ -27,4 +16,20 @@ export interface User {
   bio?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface MessageDataType {
+  text?: string;
+  image?: string;
+}
+export interface Message {
+  _id?: string;
+  senderId?: string;
+  receiverId?: string;
+  text?: string;
+  image?: string;
+  seen?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
