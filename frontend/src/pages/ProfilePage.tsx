@@ -50,7 +50,7 @@ const ProfilePage = () => {
             <input
               onChange={(e) => {
                 const file = e.target.files?.[0];
-                if (file) {
+                if (file) { 
                   setSelectedFile(file);
                   setSelectedImg(undefined);
                 }

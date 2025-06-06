@@ -1,12 +1,10 @@
 import ChatContainer from "@/components/ChatContainer";
 import RightSideBar from "@/components/RightSideBar";
 import Sidebar from "@/components/Sidebar";
-import type { UserInfoProps } from "@/context/AuthContext/types";
-import { useState } from "react";
+import { useChat } from "@/hooks/useChat";
 
 const HomePage = () => {
-  const [selectedUser, setSelectedUser] = useState<UserInfoProps | null>(null);
-
+  const { selectedUser } = useChat();
   return (
     <div className="w-full h-screen sm:px-[10%] sm:py-[3%] ">
       <div
@@ -18,7 +16,7 @@ const HomePage = () => {
       >
         <Sidebar />
         <ChatContainer />
-        <RightSideBar selectedUser={selectedUser} />
+        <RightSideBar />
       </div>
     </div>
   );
