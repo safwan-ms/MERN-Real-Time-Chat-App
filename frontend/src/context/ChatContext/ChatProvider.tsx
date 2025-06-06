@@ -13,6 +13,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
   const [unseenMessages, setUnseenMessages] = useState<Record<string, number>>(
     {}
   );
@@ -29,6 +30,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
       }
     } catch (error) {
       toast.error((error as Error).message);
+      setLoading(false);
       console.log(error);
     }
   };
@@ -36,16 +38,18 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   //function to get messages for selected user
   const getMessages = async (userId: string) => {
     try {
+      setLoading(true);
       const { data } = await axios.get(`/api/messages/${userId}`);
       if (data.success) {
         setMessages(
           Array.isArray(data.messages) ? data.messages : [data.messages]
         );
-        console.log(data);
       }
     } catch (error) {
       toast.error((error as Error).message);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +63,6 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
 
       if (data.success) {
         setMessages((prevMessage) => [...prevMessage, data.newMessage]);
-        console.log(data.newMessage);
       } else {
         toast.error(data.message);
       }
@@ -100,6 +103,8 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   }, [socket, selectedUser]);
 
   const value = {
+    loading,
+    setLoading,
     messages,
     users,
     selectedUser,
