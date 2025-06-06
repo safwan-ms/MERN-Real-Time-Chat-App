@@ -8,13 +8,14 @@ import Loader from "./Loader";
 
 const ChatContainer = () => {
   const {
-    loading,
-    setLoading,
+    loadingMessages,
+    setLoadingMessages,
     messages,
     selectedUser,
     setSelectedUser,
     sendMessage,
     getMessages,
+    sendingMessage,
   } = useChat();
 
   const { authUser, onlineUsers } = useAuth();
@@ -26,12 +27,8 @@ const ChatContainer = () => {
   const [input, setInput] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  // ✅ Send handler for text or image
   const handleSend = async (
-    e?:
-      | React.FormEvent<HTMLFormElement>
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLImageElement>
+    e?: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLImageElement>
   ) => {
     if (e) e.preventDefault();
 
@@ -44,7 +41,6 @@ const ChatContainer = () => {
     }
   };
 
-  // ✅ File select handler
   const handleSendImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith("image/")) {
@@ -67,10 +63,10 @@ const ChatContainer = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       if (selectedUser) {
-        setLoading(true);
+        setLoadingMessages(true);
         hasScrolledRef.current = false;
         await getMessages(selectedUser._id);
-        setLoading(false);
+        setLoadingMessages(false);
       }
     };
 
@@ -118,7 +114,7 @@ const ChatContainer = () => {
       </div>
 
       {/* Chat area */}
-      {loading ? (
+      {loadingMessages ? (
         <Loader />
       ) : (
         <div
@@ -186,25 +182,26 @@ const ChatContainer = () => {
 
       {/* Image Preview */}
       {previewImage && (
-        <div className="absolute bottom-20 left-4 right-4 bg-black/50 backdrop-blur-lg rounded-lg p-3 flex items-center gap-3">
+        <div className="justify-between absolute bottom-20 left-4 right-4 bg-black/50 backdrop-blur-lg rounded-lg p-3 flex items-center gap-3">
           <img
             src={previewImage}
             alt="preview"
             className="w-16 h-16 object-cover rounded border border-gray-700"
           />
-          <p className="text-white text-sm">
-            Image selected. Press send or Enter.
-          </p>
+          <p className="text-white text-sm">Press Send button to send.</p>
+          {sendingMessage && <Loader />}
         </div>
       )}
 
-      {/* Input area */}
-      <div className="absolute bottom-0 left-0 right-0 flex items-center gap-3 p-3">
+      {/* Input area wrapped in a form */}
+      <form
+        onSubmit={handleSend}
+        className="absolute bottom-0 left-0 right-0 flex items-center gap-3 p-3"
+      >
         <div className="flex-1 flex items-center bg-gray-100/10 px-3 rounded-full">
           <input
             onChange={(e) => setInput(e.target.value)}
             value={input}
-            onKeyDown={(e) => e.key === "Enter" && handleSend(e)}
             type="text"
             placeholder="Send a Message..."
             className="flex-1 text-sm p-3 border-none rounded-lg outline-none text-white placeholder-gray-400"
@@ -227,13 +224,14 @@ const ChatContainer = () => {
           </label>
         </div>
 
-        <img
-          onClick={handleSend}
-          src={assets.send_button}
-          alt="send_button"
-          className="w-7 cursor-pointer"
-        />
-      </div>
+        <button type="submit">
+          <img
+            src={assets.send_button}
+            alt="send_button"
+            className="w-7 cursor-pointer"
+          />
+        </button>
+      </form>
     </main>
   ) : (
     <div className="flex flex-col items-center justify-center gap-2 text-gray-500 bg-white/10 max-md:hidden h-full">

@@ -13,7 +13,8 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState(false);
   const [unseenMessages, setUnseenMessages] = useState<Record<string, number>>(
     {}
   );
@@ -30,7 +31,6 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
       }
     } catch (error) {
       toast.error((error as Error).message);
-      setLoading(false);
       console.log(error);
     }
   };
@@ -38,7 +38,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   //function to get messages for selected user
   const getMessages = async (userId: string) => {
     try {
-      setLoading(true);
+      setLoadingMessages(true);
       const { data } = await axios.get(`/api/messages/${userId}`);
       if (data.success) {
         setMessages(
@@ -49,13 +49,14 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
       toast.error((error as Error).message);
       console.log(error);
     } finally {
-      setLoading(false);
+      setLoadingMessages(false);
     }
   };
 
   //function to send message to selected user
   const sendMessage = async (messageData: MessageDataType) => {
     try {
+      setSendingMessage(true);
       const { data } = await axios.post(
         `/api/messages/send/${selectedUser?._id}`,
         messageData
@@ -63,10 +64,12 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
 
       if (data.success) {
         setMessages((prevMessage) => [...prevMessage, data.newMessage]);
+        setSendingMessage(false);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
+      setSendingMessage(false);
       toast.error((error as Error).message);
       console.log(error);
     }
@@ -103,8 +106,8 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   }, [socket, selectedUser]);
 
   const value = {
-    loading,
-    setLoading,
+    loadingMessages,
+    setLoadingMessages,
     messages,
     users,
     selectedUser,
@@ -115,6 +118,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     unseenMessages,
     setUnseenMessages,
     getMessages,
+    sendingMessage,
   };
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };

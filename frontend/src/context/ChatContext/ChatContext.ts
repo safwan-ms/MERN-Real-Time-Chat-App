@@ -12,8 +12,9 @@ interface ChatContextType {
   unseenMessages: Record<string, number>;
   setUnseenMessages: Dispatch<SetStateAction<Record<string, number>>>;
   getMessages: (userId: string) => Promise<void>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loadingMessages: boolean;
+  setLoadingMessages: React.Dispatch<React.SetStateAction<boolean>>;
+  sendingMessage: boolean;
 }
 
 export const ChatContext = createContext<ChatContextType | undefined>(
