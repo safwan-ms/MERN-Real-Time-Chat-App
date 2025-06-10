@@ -4,9 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "backend": "nodemon backend/index.js",
-    "frontend": "cd frontend && npm run dev",
-    "dev": "concurrently --raw \"cd frontend && npm run dev\" \"nodemon backend/index.js\""
+    "backend": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
