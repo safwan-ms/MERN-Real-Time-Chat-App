@@ -9,7 +9,7 @@ const App = () => {
   const { authUser } = useAuth();
 
   return (
-    <div className="bg-[url('./src/assets/bgImage.svg')] bg-cover bg-no-repeat overflow-hidden">
+    <div className="bg-[url('./src/assets/purple-bg.jpg')] bg-cover bg-no-repeat overflow-hidden">
       <Toaster />
       <Routes>
         <Route
