@@ -19,7 +19,7 @@ const server = http.createServer(app);
 //Initialize socket.io server
 export const io = new Server(server, {
   cors: {
-    origin: "https://chat-app-frontend-eta-eight.vercel.app",
+    origin: "https://chat-app-frontend-d71d.onrender.com",
     credentials: true,
   },
 });
@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
 app.use(express.json({ limit: "4mb" }));
 app.use(
   cors({
-    origin: "https://chat-app-frontend-eta-eight.vercel.app",
+    origin: "https://chat-app-frontend-d71d.onrender.com",
     credentials: true,
   })
 );
