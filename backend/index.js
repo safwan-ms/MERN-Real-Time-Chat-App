@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import http from "http";
+import path from "path";
 import connectDB from "./lib/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
@@ -14,12 +15,14 @@ dotenv.config();
 connectDB();
 
 const app = express();
+const __dirname = path.resolve();
+
 const server = http.createServer(app);
 
 //Initialize socket.io server
 export const io = new Server(server, {
   cors: {
-    origin: "https://chat-app-frontend-d71d.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
   },
 });
@@ -48,7 +51,7 @@ io.on("connection", (socket) => {
 app.use(express.json({ limit: "4mb" }));
 app.use(
   cors({
-    origin: "https://chat-app-frontend-d71d.onrender.com",
+    origin: true,
     credentials: true,
   })
 );
@@ -61,6 +64,13 @@ app.use("/api/auth", userRoutes);
 app.use("/api/messages", messageRouter);
 
 const PORT = process.env.PORT;
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.get("/*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+}
 
 server.listen(PORT, () => console.log(`Server is listening to ${PORT}`));
 
