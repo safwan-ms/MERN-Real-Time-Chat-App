@@ -85,31 +85,33 @@ const ChatContainer = () => {
   return selectedUser ? (
     <main className="h-full overflow-hidden relative backdrop:blur-lg flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-3 py-3 px-4 border-b border-stone-500">
-        <img
-          src={selectedUser.profilePic.url || assets.avatar_icon}
-          alt="profile"
-          className="w-8 h-8 rounded-full"
-        />
-
-        <p className="flex-1 text-lg text-white flex items-center gap-2">
-          {selectedUser.fullName}
-          {onlineUsers.includes(selectedUser._id) && (
-            <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          )}
-        </p>
-
+      <div className="flex items-center gap-2 sm:gap-3 py-2 sm:py-3 px-3 sm:px-4 border-b border-stone-500">
         <img
           onClick={() => setSelectedUser(null)}
           src={assets.arrow_icon}
-          alt="icon"
-          className="md:hidden w-6 cursor-pointer"
+          alt="back"
+          className="md:hidden w-5 sm:w-6 cursor-pointer hover:opacity-70 transition-opacity"
         />
+        
+        <img
+          src={selectedUser.profilePic.url || assets.avatar_icon}
+          alt="profile"
+          className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full flex-shrink-0"
+        />
+
+        <div className="flex-1 min-w-0">
+          <p className="text-sm sm:text-base md:text-lg text-white font-medium truncate flex items-center gap-2">
+            {selectedUser.fullName}
+            {onlineUsers.includes(selectedUser._id) && (
+              <span className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></span>
+            )}
+          </p>
+        </div>
 
         <img
           src={assets.help_icon}
           alt="help_icon"
-          className="max-md:hidden w-5"
+          className="hidden md:block w-4 md:w-5 cursor-pointer hover:opacity-70 transition-opacity"
         />
       </div>
 
@@ -119,7 +121,7 @@ const ChatContainer = () => {
       ) : (
         <div
           ref={chatContainerRef}
-          className="flex-1 overflow-y-auto px-4 py-3 space-y-4 pb-24"
+          className="flex-1 overflow-y-auto px-2 sm:px-3 md:px-4 py-2 sm:py-3 space-y-3 sm:space-y-4 pb-20 sm:pb-24"
         >
           {messages?.map((msg) => {
             const isSender = msg.senderId === authUser?._id;
@@ -127,7 +129,7 @@ const ChatContainer = () => {
             return (
               <div
                 key={msg._id}
-                className={`flex items-end gap-2 ${
+                className={`flex items-end gap-1 sm:gap-2 ${
                   isSender ? "justify-end" : "justify-start"
                 }`}
               >
@@ -135,20 +137,20 @@ const ChatContainer = () => {
                   <img
                     src={selectedUser?.profilePic.url || assets.avatar_icon}
                     alt="profile"
-                    className="w-7 h-7 rounded-full"
+                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0"
                   />
                 )}
 
-                <div className="max-w-[70%]">
+                <div className="max-w-[85%] sm:max-w-[75%] md:max-w-[70%]">
                   {msg.image ? (
                     <img
                       src={msg.image}
                       alt="chat-image"
-                      className="w-full max-w-xs rounded-lg border border-gray-700"
+                      className="w-full max-w-[200px] sm:max-w-xs rounded-lg border border-gray-700"
                     />
                   ) : (
                     <p
-                      className={`p-2 text-sm font-light rounded-lg break-words text-white ${
+                      className={`p-2 sm:p-3 text-xs sm:text-sm font-light rounded-lg break-words text-white ${
                         isSender
                           ? "bg-violet-500/30 rounded-br-none"
                           : "bg-gray-700 rounded-bl-none"
@@ -170,7 +172,7 @@ const ChatContainer = () => {
                         : selectedUser.profilePic.url || assets.avatar_icon
                     }
                     alt="avatar"
-                    className="w-7 h-7 rounded-full"
+                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0"
                   />
                 )}
               </div>
@@ -182,13 +184,13 @@ const ChatContainer = () => {
 
       {/* Image Preview */}
       {previewImage && (
-        <div className="justify-between absolute bottom-20 left-4 right-4 bg-black/50 backdrop-blur-lg rounded-lg p-3 flex items-center gap-3">
+        <div className="justify-between absolute bottom-16 sm:bottom-20 left-2 right-2 sm:left-4 sm:right-4 bg-black/50 backdrop-blur-lg rounded-lg p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
           <img
             src={previewImage}
             alt="preview"
-            className="w-16 h-16 object-cover rounded border border-gray-700"
+            className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded border border-gray-700 flex-shrink-0"
           />
-          <p className="text-white text-sm">Press Send button to send.</p>
+          <p className="text-white text-xs sm:text-sm flex-1">Press Send button to send.</p>
           {sendingMessage && <Loader />}
         </div>
       )}
@@ -196,15 +198,15 @@ const ChatContainer = () => {
       {/* Input area wrapped in a form */}
       <form
         onSubmit={handleSend}
-        className="absolute bottom-0 left-0 right-0 flex items-center gap-3 p-3"
+        className="absolute bottom-0 left-0 right-0 flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gradient-to-t from-black/20 to-transparent"
       >
-        <div className="flex-1 flex items-center bg-gray-100/10 px-3 rounded-full">
+        <div className="flex-1 flex items-center bg-gray-100/10 px-3 sm:px-4 rounded-full min-w-0">
           <input
             onChange={(e) => setInput(e.target.value)}
             value={input}
             type="text"
             placeholder="Send a Message..."
-            className="flex-1 text-sm p-3 border-none rounded-lg outline-none text-white placeholder-gray-400"
+            className="flex-1 text-xs sm:text-sm p-2 sm:p-3 border-none rounded-lg outline-none text-white placeholder-gray-400 bg-transparent min-w-0"
           />
 
           <input
@@ -215,28 +217,28 @@ const ChatContainer = () => {
             hidden
           />
 
-          <label htmlFor="image">
+          <label htmlFor="image" className="cursor-pointer">
             <img
               src={assets.gallery_icon}
               alt="gallery_icon"
-              className="w-5 mr-2 cursor-pointer"
+              className="w-4 sm:w-5 mr-1 sm:mr-2 hover:opacity-70 transition-opacity"
             />
           </label>
         </div>
 
-        <button type="submit">
+        <button type="submit" className="flex-shrink-0">
           <img
             src={assets.send_button}
             alt="send_button"
-            className="w-7 cursor-pointer"
+            className="w-6 sm:w-7 cursor-pointer hover:opacity-70 transition-opacity"
           />
         </button>
       </form>
     </main>
   ) : (
-    <div className="flex flex-col items-center justify-center gap-2 text-gray-500 bg-white/10 max-md:hidden h-full">
-      <img src={assets.logo_icon} alt="logo" className="w-16" />
-      <p>Chat anytime, anywhere</p>
+    <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 text-gray-500 bg-white/10 hidden md:flex h-full px-4">
+      <img src={assets.logo_icon} alt="logo" className="w-12 sm:w-16 opacity-50" />
+      <p className="text-sm sm:text-base text-center">Chat anytime, anywhere</p>
     </div>
   );
 };
