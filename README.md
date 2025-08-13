@@ -17,6 +17,7 @@ A modern, real-time chat application built with the MERN stack (MongoDB, Express
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - **Node.js** - Runtime environment
 - **Express.js** - Web framework
 - **MongoDB** - Database
@@ -28,11 +29,11 @@ A modern, real-time chat application built with the MERN stack (MongoDB, Express
 - **Multer** - File upload handling
 
 ### Frontend
+
 - **React 19** - UI library
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
-- **Radix UI** - Accessible UI components
 - **Socket.IO Client** - Real-time communication
 - **React Router** - Client-side routing
 - **React Hot Toast** - Notifications
@@ -73,16 +74,18 @@ MERN-Real-Time-Chat-App/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/safwan-ms/MERN-Real-Time-Chat-App.git
    cd MERN-Real-Time-Chat-App
    ```
 
 2. **Install dependencies**
+
    ```bash
    # Install root dependencies
    npm install
-   
+
    # Install frontend dependencies
    npm install --prefix frontend
    ```
@@ -90,11 +93,12 @@ MERN-Real-Time-Chat-App/
 3. **Environment Setup**
 
    Create a `.env` file in the root directory:
+
    ```env
    PORT=5000
    MONGODB_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret_key
-   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUDINARY_NAME=your_cloudinary_cloud_name
    CLOUDINARY_API_KEY=your_cloudinary_api_key
    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
    ```
@@ -102,21 +106,25 @@ MERN-Real-Time-Chat-App/
 4. **Run the application**
 
    **Development mode (both frontend and backend):**
+
    ```bash
    npm run dev
    ```
 
    **Frontend only:**
+
    ```bash
    npm run frontend
    ```
 
    **Backend only:**
+
    ```bash
    npm run backend
    ```
 
    **Production build:**
+
    ```bash
    npm run build
    npm start
@@ -133,19 +141,22 @@ MERN-Real-Time-Chat-App/
 ## 🔧 API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/signup` - User registration
 - `POST /api/auth/login` - User login
 - `POST /api/auth/logout` - User logout
-- `GET /api/auth/me` - Get current user
+- `GET /api/auth/check` - To Check if authenticated
 
 ### Messages
+
 - `GET /api/messages/:id` - Get conversation messages
 - `POST /api/messages/send/:id` - Send a message
 - `PUT /api/messages/seen/:id` - Mark messages as read
 
 ### Users
+
 - `GET /api/users` - Get all users
-- `PUT /api/users/profile` - Update user profile
+- `PUT /api/auth/update-profile` - Update user profile
 
 ## 🔒 Security Features
 
@@ -167,11 +178,13 @@ MERN-Real-Time-Chat-App/
 ## 🚀 Deployment
 
 ### Backend Deployment (Heroku/ Railway/ Render)
+
 1. Set environment variables
 2. Deploy the backend directory
 3. Configure MongoDB connection
 
 ### Frontend Deployment (Vercel/ Netlify)
+
 1. Build the frontend: `npm run build --prefix frontend`
 2. Deploy the `frontend/dist` directory
 3. Update API endpoints to production URLs
